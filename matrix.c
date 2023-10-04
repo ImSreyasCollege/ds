@@ -37,7 +37,7 @@ void transposeMatrix(int mat[][100], int rows, int cols, int result[][100]) {
     }
 }
 
-int main() {
+void main() {
     int mat1[100][100], mat2[100][100], result[100][100];
     int rows1, cols1, rows2, cols2;
 
@@ -65,10 +65,6 @@ int main() {
         }
     }
 
-    if (cols1 != rows2) {
-        printf("Matrix multiplication is not possible. Number of columns in the first matrix must be equal to the number of rows in the second matrix.\n");
-        return 1;
-    }
 
     if (rows1 == rows2 && cols1 == cols2) {
         addMatrices(mat1, mat2, result, rows1, cols1);
@@ -77,10 +73,13 @@ int main() {
     } else {
         printf("Matrix addition is not possible. Matrices must have the same dimensions for addition.\n");
     }
-
-    multiplyMatrices(mat1, rows1, cols1, mat2, cols2, result);
-    printf("Matrix Multiplication Result:\n");
-    displayMatrix(result, rows1, cols2);
+    if (cols1 != rows2) {
+        printf("Matrix multiplication is not possible. Number of columns in the first matrix must be equal to the number of rows in the second matrix.\n");
+    } else {
+        multiplyMatrices(mat1, rows1, cols1, mat2, cols2, result);
+        printf("Matrix Multiplication Result:\n");
+        displayMatrix(result, rows1, cols2);
+    }
 
     transposeMatrix(mat1, rows1, cols1, result);
     printf("Transpose of the First Matrix:\n");
@@ -89,6 +88,4 @@ int main() {
     transposeMatrix(mat2, rows2, cols2, result);
     printf("Transpose of the Second Matrix:\n");
     displayMatrix(result, cols2, rows2);
-
-    return 0;
 }
