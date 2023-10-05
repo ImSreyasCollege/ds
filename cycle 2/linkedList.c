@@ -23,10 +23,10 @@ void insertAtBeginning(int data){
     }
 }
 void insertAtEnd(int data){
-    node *newnode = (struct node *)(malloc(sizeof(node)));
+    node *newnode = createNewNode(data);
 }
 void insertAtPosition(int data){
-    node *newnode = (struct node *)(malloc(sizeof(node)));
+    node *newnode = createNewNode(data);
 }
 void display(){
     if(head == NULL){
@@ -39,6 +39,12 @@ void display(){
         }
         printf("\n");
     }
+}
+node * createNewNode(data){
+    node * newnode = (node *)malloc((sizeof(node *)));
+    newnode -> data = data;
+    newnode -> link = NULL;
+    return newnode;
 }
 int main(){
     int choice;
