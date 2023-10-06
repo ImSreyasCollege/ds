@@ -102,6 +102,7 @@ int main() {
     display(merged, mergedSize);
 
     int choice;
+    int element, position;
     while (1) {
         printf("\nArray Operations:\n");
         printf("1. Insertion\n");
@@ -113,7 +114,6 @@ int main() {
 
         switch (choice) {
             case 1:
-                int element, position;
                 printf("Enter the element to insert: ");
                 scanf("%d", &element);
                 printf("Enter the position for insertion: ");
@@ -123,6 +123,7 @@ int main() {
                 break;
 
             case 2:
+                printf("Enter the position for deletion: ");
                 scanf("%d", &position);
                 deleteElement(merged, &mergedSize, position);
                 printf("Element deleted successfully.\n");

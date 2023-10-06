@@ -47,7 +47,7 @@ void insertionSort(int arr[], int size) {
     }
 }
 
-int main() {
+void main() {
     int arr[100], size;
     
     printf("Enter the number of elements in the array: ");
@@ -84,6 +84,4 @@ int main() {
     //display insertion sort 
     printf("Insertion Sort Result: ");
     displayArray(insertionSortedArr, size);
-
-    return 0;
 }
