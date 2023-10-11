@@ -12,7 +12,7 @@ void display();
 int main(){
     int c;
     while(1){
-        printf("1.enqueue\n2.delte\n3.display rear\n4.display front\n5.display\n6.Exit\nEnter the operation : ");
+        printf("1.enqueue\n2.dequeue\n3.display rear\n4.display front\n5.display\n6.Exit\nEnter the operation : ");
         scanf("%d", &c);
         switch(c){
             case 1: enqueue();
@@ -26,7 +26,7 @@ int main(){
             case 5: display();
             break;
             case 6: return 0;
-            default: "invalid option! Please enter a valid option : ";
+            default: printf("invalid option! Please enter a valid option.\n");
         }
     }
 }

@@ -10,7 +10,12 @@ typedef struct node{
 } node;
 
 node * head = NULL;
-
+node *createNewNode(int data){
+    node * newnode = (node *)malloc((sizeof(node *)));
+    newnode -> data = data;
+    newnode -> link = NULL;
+    return newnode;
+}
 void insertAtBeginning(int data){
     node *newnode = (node *)(malloc(sizeof(node)));
     newnode->data = data;
@@ -40,12 +45,7 @@ void display(){
         printf("\n");
     }
 }
-node * createNewNode(data){
-    node * newnode = (node *)malloc((sizeof(node *)));
-    newnode -> data = data;
-    newnode -> link = NULL;
-    return newnode;
-}
+
 int main(){
     int choice;
     int data;
