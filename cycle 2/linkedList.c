@@ -19,39 +19,30 @@ node *createNewNode(){
     newnode -> link = NULL;
     return newnode;
 }
-//insertion
-
-//beginning
 void insertAtBeginning(){
     node *newnode = createNewNode();
     newnode->link = NULL;
-    if(head==NULL){
-        head = newnode;
-    } else {
+    if(head==NULL) head = newnode;
+    else {
         (newnode)->link = head;
         head = newnode;
     }
 }
-//end
 void insertAtEnd(){
     if(head==NULL) insertAtBeginning();
     else {
     node *newnode = createNewNode();
           node * temp = head;     
-          while(temp->link !=NULL){
-            temp = temp -> link;
-          }
+          while(temp->link !=NULL) temp = temp -> link;
           temp->link = newnode;
     }
 }
-//position
 void insertAtPosition(){
     int pos;
     printf("enter the position to insert : ");
     scanf("%d", &pos);
-    if(pos<=1 || head==NULL){
-        insertAtBeginning();
-    } else {
+    if(pos<=1 || head==NULL) insertAtBeginning();
+    else {
         node * newnode = createNewNode();
         node * temp = head;
         int count = 2;
@@ -63,44 +54,33 @@ void insertAtPosition(){
         temp->link = newnode;
     }
 }
-//deletion 
-
-//beginning
 void deleteAtBeginning(){
-    if(head==NULL){
-        printf("linked list is empty.\n");
-    } else {
-        head = head->link;
-    }
+    if(head==NULL) printf("linked list is empty.\n");
+    else head = head->link;
 }
 void deleteAtEnd(){
-    if(head==NULL) {
-        printf("linked list is empty.\n");
-    } else {
+    if(head==NULL) printf("linked list is empty.\n");
+    else {
         node * temp = head;
         node * dup = temp;
-        if(temp->link == NULL){
-            head = NULL;
-        } else {
-            while(temp->link!=NULL){
+        if(temp->link == NULL) head = NULL;
+        else {
+            while(temp->link!=NULL) {
                 dup = temp;
                 temp = temp-> link;
-            }
-            dup-> link = NULL;
+            } dup-> link = NULL;
         }
     }
 }
 void deleteAtPosition(){
     int pos;
-    if(head==NULL){
-        printf("linked list is empty\n");
-    } else {
+    if(head==NULL) printf("linked list is empty\n");
+    else {
         printf("enter the position to insert : ");
         scanf("%d", &pos);
 
-        if(pos<=1){
-            deleteAtBeginning();
-        } else {
+        if(pos<=1) deleteAtBeginning();
+        else {
             node * temp = head;
             node * dup = temp;
             int count = 2;
@@ -109,49 +89,35 @@ void deleteAtPosition(){
                 temp = temp->link;
                 count++;
             } 
-            if(temp->link == NULL){
-                dup->link = NULL;
-            } else {
-                dup->link = dup->link->link;
-            }
+            if(temp->link == NULL) dup->link = NULL;
+            else dup->link = dup->link->link;
         }
     }
 }
 void display(){
-    if(head == NULL){
-        printf("linked list is empty.\n");
-    } else {
+    if(head == NULL) printf("linked list is empty.\n");
+    else {
         node *temp = head;
         while(temp != NULL){
             printf("%d -> ", temp-> data);
             temp = temp->link;
-        }
-        printf("\n");
+        } printf("\n");
     }
 }
-
 int main(){
     int choice;
     int data;
     while(true){
         printf("1.insert at beginning\n2.insert at end\n3.insert at position\n4.delete at beginning\n5.delete at end\n6.delete at position\n7.display\nEnter the operation you want : ");
         scanf("%d", &choice);
-
         switch (choice){
-            case 1: insertAtBeginning();
-            break;
-            case 2: insertAtEnd();
-            break;
-            case 3: insertAtPosition();
-            break;
-            case 4: deleteAtBeginning();
-            break;
-            case 5: deleteAtEnd();
-            break;
-            case 6: deleteAtPosition();
-            break;
-            case 7: display();
-            break;
+            case 1: insertAtBeginning();break;
+            case 2: insertAtEnd();break;
+            case 3: insertAtPosition();break;
+            case 4: deleteAtBeginning();break;
+            case 5: deleteAtEnd();break;
+            case 6: deleteAtPosition();break;
+            case 7: display();break;
             case 8: return 0;
             default: printf("invalid input, please enter a valid input\n\n");
         }
