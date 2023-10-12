@@ -10,7 +10,10 @@ typedef struct node{
 } node;
 
 node * head = NULL;
-node *createNewNode(int data){
+node *createNewNode(){
+    int data;
+    printf("enter the data to be inserted : ");
+    scanf("%d", &data);
     node * newnode = (node *)malloc((sizeof(node *)));
     newnode -> data = data;
     newnode -> link = NULL;
@@ -19,9 +22,8 @@ node *createNewNode(int data){
 //insertion
 
 //beginning
-void insertAtBeginning(int data){
-    node *newnode = createNewNode(data);
-    newnode->data = data;
+void insertAtBeginning(){
+    node *newnode = createNewNode();
     newnode->link = NULL;
     if(head==NULL){
         head = newnode;
@@ -31,16 +33,35 @@ void insertAtBeginning(int data){
     }
 }
 //end
-void insertAtEnd(int data){
-    node *newnode = createNewNode(data);
-    if(head==NULL) insertAtBeginning(data);
+void insertAtEnd(){
+    if(head==NULL) insertAtBeginning();
     else {
-               
+    node *newnode = createNewNode();
+          node * temp = head;     
+          while(temp->link !=NULL){
+            temp = temp -> link;
+          }
+          temp->link = newnode;
     }
 }
 //position
-void insertAtPosition(int data){
-    
+void insertAtPosition(){
+    int pos;
+    printf("enter the position to insert : ");
+    scanf("%d", &pos);
+    if(pos<=1){
+        insertAtBeginning();
+    } else {
+        node * newnode = createNewNode();
+        node * temp = head;
+        int count = 2;
+        while(temp->link != NULL && count!=pos){
+            temp = temp->link;
+            count++;
+        }
+        newnode->link = temp->link;
+        temp->link = newnode;
+    }
 }
 //deletion 
 
@@ -75,13 +96,11 @@ int main(){
         scanf("%d", &choice);
 
         switch (choice){
-            case 1: printf("enter the data to be inserted : ");
-            scanf("%d", &data);
-            insertAtBeginning(data);
+            case 1: insertAtBeginning();
             break;
-            case 2: insertAtEnd(data);
+            case 2: insertAtEnd();
             break;
-            case 3: insertAtPosition(data);
+            case 3: insertAtPosition();
             break;
             case 4: deleteAtBeginning();
             break;
