@@ -39,7 +39,7 @@ void enqueue(){
         scanf("%d", &data);   
         rear++;
         q[rear%max] = data;
-        printf("data iserted to position %d\n", rear%max+1);
+        printf("data inserted to position %d\n", rear%max+1);
     }
 }
 void dequeue(){
