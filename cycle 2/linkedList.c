@@ -16,8 +16,11 @@ node *createNewNode(int data){
     newnode -> link = NULL;
     return newnode;
 }
+//insertion
+
+//beginning
 void insertAtBeginning(int data){
-    node *newnode = (node *)(malloc(sizeof(node)));
+    node *newnode = createNewNode(data);
     newnode->data = data;
     newnode->link = NULL;
     if(head==NULL){
@@ -27,11 +30,29 @@ void insertAtBeginning(int data){
         head = newnode;
     }
 }
+//end
 void insertAtEnd(int data){
     node *newnode = createNewNode(data);
+    if(head==NULL) insertAtBeginning(data);
+    else {
+               
+    }
 }
+//position
 void insertAtPosition(int data){
-    node *newnode = createNewNode(data);
+    
+}
+//deletion 
+
+//beginning
+void deleteAtBeginning(){
+
+}
+void deleteAtEnd(){
+
+}
+void deleteAtPosition(){
+
 }
 void display(){
     if(head == NULL){
@@ -58,16 +79,16 @@ int main(){
             scanf("%d", &data);
             insertAtBeginning(data);
             break;
-            // case 2: insertAtEnd();
-            // break;
-            // case 3: insertAtPosition();
-            // break;
-            // case 4: deleteAtBeginning();
-            // break;
-            // case 5: deleteAtEnd();
-            // break;
-            // case 6: deleteAtPosition();
-            // break;
+            case 2: insertAtEnd(data);
+            break;
+            case 3: insertAtPosition(data);
+            break;
+            case 4: deleteAtBeginning();
+            break;
+            case 5: deleteAtEnd();
+            break;
+            case 6: deleteAtPosition();
+            break;
             case 7: display();
             break;
             case 8: return 0;
