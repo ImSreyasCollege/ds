@@ -49,7 +49,7 @@ void insertAtPosition(){
     int pos;
     printf("enter the position to insert : ");
     scanf("%d", &pos);
-    if(pos<=1){
+    if(pos<=1 || head==NULL){
         insertAtBeginning();
     } else {
         node * newnode = createNewNode();
@@ -67,17 +67,59 @@ void insertAtPosition(){
 
 //beginning
 void deleteAtBeginning(){
-
+    if(head==NULL){
+        printf("linked list is empty.\n");
+    } else {
+        head = head->link;
+    }
 }
 void deleteAtEnd(){
-
+    if(head==NULL) {
+        printf("linked list is empty.\n");
+    } else {
+        node * temp = head;
+        node * dup = temp;
+        if(temp->link == NULL){
+            head = NULL;
+        } else {
+            while(temp->link!=NULL){
+                dup = temp;
+                temp = temp-> link;
+            }
+            dup-> link = NULL;
+        }
+    }
 }
 void deleteAtPosition(){
+    int pos;
+    if(head==NULL){
+        printf("linked list is empty\n");
+    } else {
+        printf("enter the position to insert : ");
+        scanf("%d", &pos);
 
+        if(pos<=1){
+            deleteAtBeginning();
+        } else {
+            node * temp = head;
+            node * dup = temp;
+            int count = 2;
+            while(temp->link != NULL && count!=pos){
+                dup = temp;
+                temp = temp->link;
+                count++;
+            } 
+            if(temp->link == NULL){
+                dup->link = NULL;
+            } else {
+                dup->link = dup->link->link;
+            }
+        }
+    }
 }
 void display(){
     if(head == NULL){
-        printf("linked list is empty.");
+        printf("linked list is empty.\n");
     } else {
         node *temp = head;
         while(temp != NULL){
