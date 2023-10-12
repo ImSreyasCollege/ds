@@ -108,7 +108,7 @@ int main(){
     int choice;
     int data;
     while(true){
-        printf("1.insert at beginning\n2.insert at end\n3.insert at position\n4.delete at beginning\n5.delete at end\n6.delete at position\n7.display\nEnter the operation you want : ");
+        printf("1.insert at beginning\n2.insert at end\n3.insert at position\n4.delete at beginning\n5.delete at end\n6.delete at position\n7.display\n8.exit\nEnter the operation you want : ");
         scanf("%d", &choice);
         switch (choice){
             case 1: insertAtBeginning();break;
