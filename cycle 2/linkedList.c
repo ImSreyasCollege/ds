@@ -104,11 +104,26 @@ void display(){
         } printf("\n");
     }
 }
+void search(){
+    int key, flag=0;
+    printf("enter the element to search : ");
+    scanf("%d", &key);
+
+    node * temp = head;
+    while(temp != NULL){
+        if(temp->data == key){
+            printf("element found.\n");
+            return;
+        } flag = 1;
+        temp=temp->link;
+    }
+    printf("element not found.\n");
+}
 int main(){
     int choice;
     int data;
     while(true){
-        printf("1.insert at beginning\n2.insert at end\n3.insert at position\n4.delete at beginning\n5.delete at end\n6.delete at position\n7.display\n8.exit\nEnter the operation you want : ");
+        printf("\n1.insert at beginning\n2.insert at end\n3.insert at position\n4.delete at beginning\n5.delete at end\n6.delete at position\n7.display\n8.search\n9.exit\nEnter the operation you want : ");
         scanf("%d", &choice);
         switch (choice){
             case 1: insertAtBeginning();break;
@@ -118,7 +133,8 @@ int main(){
             case 5: deleteAtEnd();break;
             case 6: deleteAtPosition();break;
             case 7: display();break;
-            case 8: return 0;
+            case 8: search();break;
+            case 9: return 0;
             default: printf("invalid input, please enter a valid input\n\n");
         }
     }
