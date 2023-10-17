@@ -58,30 +58,21 @@ void main() {
         scanf("%d", &arr[i]);
     }
 
-    //creating new array for storing sorted values in bubble sort.
     int bubbleSortedArr[100];
     for (int i = 0; i < size; i++) bubbleSortedArr[i] = arr[i];
-    //calling bubble sort function.
     bubbleSort(bubbleSortedArr, size);
-    //display bubble sort 
     printf("Bubble Sort Result: ");
     displayArray(bubbleSortedArr, size);
 
-    //creating a new array for storing the sorted values in selection sort.
     int selectionSortedArr[100];
     for (int i = 0; i < size; i++) selectionSortedArr[i] = arr[i];
-    //calling selection sort function
     selectionSort(selectionSortedArr, size);
-    //display selection sort 
     printf("Selection Sort Result: ");
     displayArray(selectionSortedArr, size);
 
-    //creating a new array for storing the sorted values in insertion sort.
     int insertionSortedArr[100];
     for (int i = 0; i < size; i++) insertionSortedArr[i] = arr[i];
-    //calling insertion sort function
     insertionSort(insertionSortedArr, size);
-    //display insertion sort 
     printf("Insertion Sort Result: ");
     displayArray(insertionSortedArr, size);
 }
