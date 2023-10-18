@@ -1,5 +1,5 @@
 #include <stdio.h>
-// This function is used for getting the search key 
+// This function is used for getting the search key
 int getKey(){
     int key;
     printf("enter the key to search : ");
@@ -27,7 +27,7 @@ void linearSearch(int n) {
         printf("element not found.\n");
     }
 }
-// function to perform binary search 
+// function to perform binary search
 void binarySearch(int n) {
     int left = 0, arr[50];
     int right = n - 1;
