@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 struct node{
     int data;
     struct node *next;
@@ -24,10 +26,21 @@ void insertAtBeginning(){
     }
 }
 void insertAtEnd(){
-    struct node *newnode = createNewNode();
+    if(head == NULL){
+        insertAtBeginning();
+    } else {
+        struct node *newnode = createNewNode();
+        struct node *temp = head;
+        while(temp->next != NULL){
+            temp = temp->next;
+        }
+        newnode->prev = temp;
+        temp->next = newnode;
+    }
 }
 void insertAtPosition(){
-
+    printf("enter the position to insert : ");
+    
 }
 void deleteAtBeginning(){
 
@@ -43,15 +56,15 @@ void search(){
 }
 void display(){
     struct node *temp = head;
-    while(temp != head){
-        temp = temp->next;
+    while(temp != NULL){
         printf("%d->", temp->data);
+        temp = temp->next;
     }
 }
-void main(){
+int main(){
     int opt;
     while(1){
-        printf("enter the operation (1.insert at beginning 2.insert at end 3.insert at position 4.delete at beginning 5.delete at end 6.delete at position 7.search 8.display 9.exit) : ");
+        printf("\n1.insert at beginning\n2.insert at end\n3.insert at position\n4.delete at beginning\n5.delete at end\n6.delete at position\n7.display\n8.search\n9.exit\nEnter the operation you want : ");
         scanf("%d", &opt);
         switch(opt){
             case 1:insertAtBeginning();break;
@@ -60,8 +73,8 @@ void main(){
             case 4:deleteAtBeginning();break;
             case 5:deleteAtEnd();break;
             case 6:deleteAtPosition();break;
-            case 7:deleteAtPosition();break;
-            case 8:deleteAtPosition();break;
+            case 7:display();break;
+            case 8:search();break;
             case 9:return 0;
             default: printf("invalid option.\n");
         }
