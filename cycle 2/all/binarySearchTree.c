@@ -84,14 +84,6 @@ int main() {
     inorderTraversal(root);
     printf("\n");
 
-    printf("Enter the element to delete: ");
-    scanf("%d", &value);
-    root = delete(root, value);
-
-    printf("In-order traversal after deleting %d: ", value);
-    inorderTraversal(root);
-    printf("\n");
-
     return 0;
 }
 

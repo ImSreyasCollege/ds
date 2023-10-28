@@ -21,7 +21,6 @@ node *createNewNode(){
 }
 void insertAtBeginning(){
     node *newnode = createNewNode();
-    newnode->link = NULL;
     if(head==NULL) head = newnode;
     else {
         (newnode)->link = head;
