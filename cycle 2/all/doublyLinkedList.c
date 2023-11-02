@@ -224,7 +224,7 @@ int main() {
                 break;
             case 6:
                 printf("Enter the position to delete: ");
-                scanf("%d", &position);
+                scaIn-order traversal of the BST: 1 2 6 7 10 45 nf("%d", &position);
                 deleteFromPosition(&head, position);
                 break;
             case 7:
