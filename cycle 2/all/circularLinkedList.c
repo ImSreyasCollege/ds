@@ -181,7 +181,7 @@ int main() {
     struct Node* result;
 
     do {
-        printf("Menu:\n1. insert at head\n2. Insert at tail\n3.Insert at position\n4. Delete at head\5. Delete at tail\n6. Delete at position\n7.search\n8.display\nExit\nEnter your choice : ");
+        printf("Menu:\n1. insert at head\n2. Insert at tail\n3.Insert at position\n4. Delete at head\n5. Delete at tail\n6. Delete at position\n7.search\n8.display\nExit\nEnter your choice : ");
         scanf("%d", &choice);
         switch (choice) {
             case 1:

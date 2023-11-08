@@ -39,8 +39,25 @@ void insertAtEnd(){
     }
 }
 void insertAtPosition(){
+    int pos, count=0;
     printf("enter the position to insert : ");
-    
+    scanf("%d", &pos);
+    struct node *temp = head;
+    struct node *dup = temp;
+    if(pos == 1 || head == NULL) insertAtBeginning();
+    while(temp->next != NULL && count < pos-1 ){
+        dup = temp;
+        temp = temp->next;
+    }
+    if(temp->next == NULL || pos < 1){
+        printf("invalid position.\n");
+    } else {
+        struct node *newnode = createNewNode();
+        newnode->prev = dup;
+        newnode->next = dup->next;
+        dup->next->prev =  newnode;
+        dup->next = newnode;
+    }
 }
 void deleteAtBeginning(){
 
