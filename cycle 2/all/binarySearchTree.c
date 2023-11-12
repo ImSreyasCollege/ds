@@ -69,21 +69,28 @@ void inorderTraversal(struct Node* root) {
 
 int main() {
     struct Node* root = NULL;
-    int n, value;
+    int n, value, choice;
 
-    printf("Enter the number of elements: ");
-    scanf("%d", &n);
-
-    printf("Enter %d elements:\n", n);
-    for (int i = 0; i < n; i++) {
-        scanf("%d", &value);
-        root = insert(root, value);
-    }
-
-    printf("In-order traversal of the BST: ");
-    inorderTraversal(root);
-    printf("\n");
-
+    do{
+        printf("\n1.insert\n2.delete\n3.display(in-order)\n4.exit\nEnter your operation : ");
+        scanf("%d", &choice);
+        switch(choice){
+        case 1:
+            printf("enter the value to insert : ");
+            scanf("%d", &value);
+            root = insert(root, value);
+            break;
+        case 2: 
+            printf("enter the value to delete : ");
+            scanf("%d", &value);
+            root = delete(root, value);
+            break;
+        case 3:
+            inorderTraversal(root);
+            break;
+        default: 
+            printf("invalid choice\n");
+        }
+    } while(choice != 4);
     return 0;
 }
-
