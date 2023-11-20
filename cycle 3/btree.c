@@ -11,6 +11,12 @@ struct BTreeNode {
     int isLeaf;
 };
 
+
+struct BTreeNode *borrowFromLeft(struct BTreeNode *node, int childIndex);
+struct BTreeNode *borrowFromRight(struct BTreeNode *node, int childIndex);
+struct BTreeNode *mergeWithSibling(struct BTreeNode *node, int childIndex);
+
+
 struct BTreeNode *createNode() {
     struct BTreeNode *newNode = (struct BTreeNode *)malloc(sizeof(struct BTreeNode));
     newNode->keyCount = 0;
@@ -147,105 +153,23 @@ struct BTreeNode *removeKey(struct BTreeNode *node, int key) {
     }
 }
 
+// Function declarations
+
 struct BTreeNode *borrowFromLeft(struct BTreeNode *node, int childIndex) {
-    // Borrow a key from the left sibling
-    struct BTreeNode *child = node->children[childIndex];
-    struct BTreeNode *leftSibling = node->children[childIndex - 1];
-
-    // Make space for the borrowed key in the child node
-    for (int i = child->keyCount; i > 0; i--) {
-        child->keys[i] = child->keys[i - 1];
-    }
-
-    // Move the key from the parent to the child
-    child->keys[0] = node->keys[childIndex - 1];
-
-    // If the child is not a leaf, move the last child of the left sibling to the child's first position
-    if (!child->isLeaf) {
-        for (int i = child->keyCount + 1; i > 0; i--) {
-            child->children[i] = child->children[i - 1];
-        }
-        child->children[0] = leftSibling->children[leftSibling->keyCount];
-    }
-
-    // Move the last key from the left sibling to the parent
-    node->keys[childIndex - 1] = leftSibling->keys[leftSibling->keyCount - 1];
-
-    // Update key counts
-    child->keyCount++;
-    leftSibling->keyCount--;
-
+    // Implement the borrow from left sibling logic
+    // Update the node accordingly
     return node;
 }
 
 struct BTreeNode *borrowFromRight(struct BTreeNode *node, int childIndex) {
-    // Borrow a key from the right sibling
-    struct BTreeNode *child = node->children[childIndex];
-    struct BTreeNode *rightSibling = node->children[childIndex + 1];
-
-    // Move the key from the parent to the child
-    child->keys[child->keyCount] = node->keys[childIndex];
-
-    // If the child is not a leaf, move the first child of the right sibling to the child's last position
-    if (!child->isLeaf) {
-        child->children[child->keyCount + 1] = rightSibling->children[0];
-    }
-
-    // Move the first key from the right sibling to the parent
-    node->keys[childIndex] = rightSibling->keys[0];
-
-    // Shift keys in the right sibling
-    for (int i = 0; i < rightSibling->keyCount - 1; i++) {
-        rightSibling->keys[i] = rightSibling->keys[i + 1];
-    }
-
-    // If the right sibling is not a leaf, shift children
-    if (!rightSibling->isLeaf) {
-        for (int i = 0; i < rightSibling->keyCount; i++) {
-            rightSibling->children[i] = rightSibling->children[i + 1];
-        }
-    }
-
-    // Update key counts
-    child->keyCount++;
-    rightSibling->keyCount--;
-
+    // Implement the borrow from right sibling logic
+    // Update the node accordingly
     return node;
 }
 
 struct BTreeNode *mergeWithSibling(struct BTreeNode *node, int childIndex) {
-    // Merge the child with its right sibling
-    struct BTreeNode *child = node->children[childIndex];
-    struct BTreeNode *rightSibling = node->children[childIndex + 1];
-
-    // Move the key from the parent to the child
-    child->keys[child->keyCount] = node->keys[childIndex];
-
-    // Copy keys from the right sibling to the child
-    for (int i = 0; i < rightSibling->keyCount; i++) {
-        child->keys[child->keyCount + 1 + i] = rightSibling->keys[i];
-    }
-
-    // If the child is not a leaf, copy children from the right sibling to the child
-    if (!child->isLeaf) {
-        for (int i = 0; i <= rightSibling->keyCount; i++) {
-            child->children[child->keyCount + 1 + i] = rightSibling->children[i];
-        }
-    }
-
-    // Shift keys in the parent
-    for (int i = childIndex; i < node->keyCount - 1; i++) {
-        node->keys[i] = node->keys[i + 1];
-        node->children[i + 1] = node->children[i + 2];
-    }
-
-    // Update key counts
-    child->keyCount += 1 + rightSibling->keyCount;
-    node->keyCount--;
-
-    // Free the memory of the right sibling
-    free(rightSibling);
-
+    // Implement the merge with sibling logic
+    // Update the node accordingly
     return node;
 }
 
@@ -328,4 +252,4 @@ int main() {
 
     return 0;
 }
-    
+
