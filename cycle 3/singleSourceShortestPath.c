@@ -2,245 +2,216 @@
 #include <stdlib.h>
 #include <limits.h>
 
-// Structure to represent a vertex in the graph
-struct Vertex {
-    int id;
+// Structure to represent a node in the graph
+struct Node {
+    int vertex;
+    int weight;
+    struct Node* next;
+};
+
+// Structure to represent the graph
+struct Graph {
+    int V;          // Number of vertices
+    struct Node** adjList;  // Adjacency list
+};
+
+// Structure to represent a node in the heap
+struct HeapNode {
+    int vertex;
     int distance;
 };
 
-// Structure to represent a binary heap
+// Structure to represent the heap
 struct BinaryHeap {
+    struct HeapNode* array;
     int capacity;
     int size;
-    struct Vertex* array;
 };
 
-// Structure to represent an edge in the graph
-struct Edge {
-    int src, dest, weight;
-};
+// Function to create a new graph
+struct Graph* createGraph(int V) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->adjList = (struct Node**)malloc(V * sizeof(struct Node*));
 
-// Structure to represent a graph
-struct Graph {
-    int vertices, edges;
-    struct Edge* edge;
-};
+    for (int i = 0; i < V; ++i) {
+        graph->adjList[i] = NULL;
+    }
 
-// Function prototypes
-struct BinaryHeap* createHeap(int capacity);
-void insert(struct BinaryHeap* heap, int id, int distance);
-struct Vertex extractMin(struct BinaryHeap* heap);
-void decreaseKey(struct BinaryHeap* heap, int id, int newDistance);
-int isInHeap(struct BinaryHeap* heap, int id);
-void dijkstra(struct Graph* graph, int source);
-
-int main() {
-    struct Graph* graph = NULL;
-    int choice, vertices, edges, i, src, dest, weight, source;
-
-    do {
-        printf("\nMenu:\n");
-        printf("1. Create Graph\n");
-        printf("2. Find Single Source Shortest Path using Dijkstra's Algorithm\n");
-        printf("3. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-
-        switch (choice) {
-            case 1:
-                printf("Enter the number of vertices: ");
-                scanf("%d", &vertices);
-
-                printf("Enter the number of edges: ");
-                scanf("%d", &edges);
-
-                graph = (struct Graph*)malloc(sizeof(struct Graph));
-                graph->vertices = vertices;
-                graph->edges = edges;
-                graph->edge = (struct Edge*)malloc(edges * sizeof(struct Edge));
-
-                printf("Enter the edges (src dest weight):\n");
-                for (i = 0; i < edges; i++) {
-                    scanf("%d %d %d", &src, &dest, &weight);
-                    graph->edge[i].src = src;
-                    graph->edge[i].dest = dest;
-                    graph->edge[i].weight = weight;
-                }
-                break;
-
-            case 2:
-                if (graph == NULL) {
-                    printf("Graph not created. Please create a graph first.\n");
-                    break;
-                }
-
-                printf("Enter the source vertex: ");
-                scanf("%d", &source);
-
-                dijkstra(graph, source);
-                break;
-
-            case 3:
-                printf("Exiting program.\n");
-                break;
-
-            default:
-                printf("Invalid choice. Please try again.\n");
-        }
-    } while (choice != 3);
-
-    return 0;
+    return graph;
 }
 
-struct BinaryHeap* createHeap(int capacity) {
+// Function to add an edge to the graph
+void addEdge(struct Graph* graph, int src, int dest, int weight) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->vertex = dest;
+    newNode->weight = weight;
+    newNode->next = graph->adjList[src];
+    graph->adjList[src] = newNode;
+}
+
+// Function to create a new heap node
+struct HeapNode* createHeapNode(int vertex, int distance) {
+    struct HeapNode* node = (struct HeapNode*)malloc(sizeof(struct HeapNode));
+    node->vertex = vertex;
+    node->distance = distance;
+    return node;
+}
+
+// Function to create a new binary heap
+struct BinaryHeap* createBinaryHeap(int capacity) {
     struct BinaryHeap* heap = (struct BinaryHeap*)malloc(sizeof(struct BinaryHeap));
+    heap->array = (struct HeapNode*)malloc(capacity * sizeof(struct HeapNode));
     heap->capacity = capacity;
     heap->size = 0;
-    heap->array = (struct Vertex*)malloc(capacity * sizeof(struct Vertex));
     return heap;
 }
 
-void insert(struct BinaryHeap* heap, int id, int distance) {
-    if (heap->size == heap->capacity) {
-        printf("Heap overflow\n");
-        return;
+// Function to swap two heap nodes
+void swapHeapNodes(struct HeapNode* a, struct HeapNode* b) {
+    struct HeapNode temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Function to heapify a subtree rooted with the given index
+void heapify(struct BinaryHeap* heap, int index) {
+    int smallest = index;
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
+
+    if (left < heap->size && heap->array[left].distance < heap->array[smallest].distance) {
+        smallest = left;
     }
 
-    int i = heap->size++;
-    heap->array[i].id = id;
-    heap->array[i].distance = distance;
+    if (right < heap->size && heap->array[right].distance < heap->array[smallest].distance) {
+        smallest = right;
+    }
 
-    // Fix the min heap property
-    while (i != 0 && heap->array[(i - 1) / 2].distance > heap->array[i].distance) {
-        // Swap the current node with its parent
-        struct Vertex temp = heap->array[i];
-        heap->array[i] = heap->array[(i - 1) / 2];
-        heap->array[(i - 1) / 2] = temp;
-
-        i = (i - 1) / 2; // Move to the parent index
+    if (smallest != index) {
+        swapHeapNodes(&heap->array[index], &heap->array[smallest]);
+        heapify(heap, smallest);
     }
 }
 
-struct Vertex extractMin(struct BinaryHeap* heap) {
-    if (heap->size <= 0) {
-        struct Vertex nullVertex = {-1, -1};
-        return nullVertex;
-    }
-
+// Function to extract the minimum node from the heap
+struct HeapNode extractMin(struct BinaryHeap* heap) {
     if (heap->size == 1) {
         heap->size--;
         return heap->array[0];
     }
 
-    // Store the minimum value, and remove it from the heap
-    struct Vertex root = heap->array[0];
+    struct HeapNode root = heap->array[0];
     heap->array[0] = heap->array[heap->size - 1];
     heap->size--;
-
-    // Fix the min heap property
-    int i = 0;
-    while (1) {
-        int leftChild = 2 * i + 1;
-        int rightChild = 2 * i + 2;
-        int smallest = i;
-
-        if (leftChild < heap->size && heap->array[leftChild].distance < heap->array[smallest].distance) {
-            smallest = leftChild;
-        }
-
-        if (rightChild < heap->size && heap->array[rightChild].distance < heap->array[smallest].distance) {
-            smallest = rightChild;
-        }
-
-        if (smallest != i) {
-            // Swap the current node with the smallest child
-            struct Vertex temp = heap->array[i];
-            heap->array[i] = heap->array[smallest];
-            heap->array[smallest] = temp;
-
-            i = smallest; // Move to the smallest child index
-        } else {
-            break;
-        }
-    }
+    heapify(heap, 0);
 
     return root;
 }
 
-void decreaseKey(struct BinaryHeap* heap, int id, int newDistance) {
+// Function to decrease the distance value of a given vertex
+void decreaseKey(struct BinaryHeap* heap, int vertex, int newDistance) {
     int i;
     for (i = 0; i < heap->size; i++) {
-        if (heap->array[i].id == id) {
-            heap->array[i].distance = newDistance;
+        if (heap->array[i].vertex == vertex) {
             break;
         }
     }
 
-    // Fix the min heap property
-    while (i != 0 && heap->array[(i - 1) / 2].distance > heap->array[i].distance) {
-        // Swap the current node with its parent
-        struct Vertex temp = heap->array[i];
-        heap->array[i] = heap->array[(i - 1) / 2];
-        heap->array[(i - 1) / 2] = temp;
+    heap->array[i].distance = newDistance;
 
-        i = (i - 1) / 2; // Move to the parent index
+    // Fix the min heap property if it is violated
+    while (i > 0 && heap->array[i].distance < heap->array[(i - 1) / 2].distance) {
+        swapHeapNodes(&heap->array[i], &heap->array[(i - 1) / 2]);
+        i = (i - 1) / 2;
     }
 }
 
-int isInHeap(struct BinaryHeap* heap, int id) {
+// Function to check if a vertex is in the heap
+int isInHeap(struct BinaryHeap* heap, int vertex) {
     for (int i = 0; i < heap->size; i++) {
-        if (heap->array[i].id == id) {
+        if (heap->array[i].vertex == vertex) {
             return 1;
         }
     }
     return 0;
 }
 
-void dijkstra(struct Graph* graph, int source) {
-    int vertices = graph->vertices;
-    int* distance = (int*)malloc(vertices * sizeof(int));
-    int* parent = (int*)malloc(vertices * sizeof(int));
+// Function to print the distance values of vertices
+void printDistances(int* dist, int n) {
+    printf("Shortest distances from source:\n");
+    for (int i = 0; i < n; i++) {
+        printf("To vertex %d: %d\n", i, dist[i]);
+    }
+}
 
-    struct BinaryHeap* heap = createHeap(vertices);
+// Function to perform Dijkstra's algorithm using a binary heap
+void dijkstra(struct Graph* graph, int startVertex) {
+    int V = graph->V;
+    int* dist = (int*)malloc(V * sizeof(int));
+    struct BinaryHeap* heap = createBinaryHeap(V);
 
-    // Initialize distances and parent array
-    for (int i = 0; i < vertices; i++) {
-        distance[i] = INT_MAX;
-        parent[i] = -1;
+    // Initialize distances and heap
+    for (int i = 0; i < V; i++) {
+        dist[i] = INT_MAX;
+        heap->array[i] = *createHeapNode(i, dist[i]);
+        heap->size++;
     }
 
-    // Set the distance of the source vertex to 0
-    distance[source] = 0;
-    insert(heap, source, 0);
+    // Set the distance of the start vertex to 0
+    dist[startVertex] = 0;
+    decreaseKey(heap, startVertex, 0);
 
+    // Dijkstra's algorithm
     while (heap->size > 0) {
-        struct Vertex minVertex = extractMin(heap);
-        int u = minVertex.id;
+        struct HeapNode minNode = extractMin(heap);
+        int u = minNode.vertex;
 
-        // Iterate through all adjacent vertices of u
-        for (int i = 0; i < graph->edges; i++) {
-            if (graph->edge[i].src == u) {
-                int v = graph->edge[i].dest;
-                int weight = graph->edge[i].weight;
+        struct Node* temp = graph->adjList[u];
+        while (temp != NULL) {
+            int v = temp->vertex;
+            int weight = temp->weight;
 
-                // Relaxation step
-                if (isInHeap(heap, v) && distance[u] != INT_MAX && distance[u] + weight < distance[v]) {
-                    distance[v] = distance[u] + weight;
-                    parent[v] = u;
-                    decreaseKey(heap, v, distance[v]);
-                }
+            if (isInHeap(heap, v) && dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+                decreaseKey(heap, v, dist[v]);
             }
+
+            temp = temp->next;
         }
     }
 
-    // Print the result
-    printf("\nSingle Source Shortest Path using Dijkstra's Algorithm:\n");
-    for (int i = 0; i < vertices; i++) {
-        printf("Vertex %d -> Distance: %d, Parent: %d\n", i, distance[i], parent[i]);
-    }
+    // Print the shortest distances
+    printDistances(dist, V);
 
-    free(distance);
-    free(parent);
+    free(dist);
     free(heap->array);
     free(heap);
+}
+
+int main() {
+    int V, E;
+
+    printf("Enter the number of vertices: ");
+    scanf("%d", &V);
+
+    struct Graph* graph = createGraph(V);
+
+    printf("Enter the number of edges: ");
+    scanf("%d", &E);
+
+    printf("Enter edges in the format (src dest weight):\n");
+    for (int i = 0; i < E; i++) {
+        int src, dest, weight;
+        scanf("%d %d %d", &src, &dest, &weight);
+        addEdge(graph, src, dest, weight);
+    }
+
+    int startVertex;
+    printf("Enter the starting vertex: ");
+    scanf("%d", &startVertex);
+
+    dijkstra(graph, startVertex);
+
+    return 0;
 }
