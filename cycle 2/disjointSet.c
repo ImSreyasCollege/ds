@@ -1,92 +1,84 @@
 #include <stdio.h>
-#include <stdlib.h>
+#define MAX 100
 
-// Structure to represent a disjoint-set element
-struct DisjointSet {
-    int parent; // Parent of the element
-    int rank;   // Rank of the element (used for union by rank)
-};
+int parent[MAX], rank[MAX], n;
 
-// Function to make a set with a single element
-void makeSet(struct DisjointSet* sets, int size) {
-    for (int i = 0; i < size; i++) {
-        sets[i].parent = i;
-        sets[i].rank = 0;
-    }
-}
-
-// Function to find the representative (root) of a set
-int find(struct DisjointSet* sets, int i) {
-    if (sets[i].parent != i) {
-        // Path compression: Set the parent of i to its root
-        sets[i].parent = find(sets, sets[i].parent);
-    }
-    return sets[i].parent;
-}
-
-// Function to union two sets by rank
-void unionSets(struct DisjointSet* sets, int x, int y) {
-    int rootX = find(sets, x);
-    int rootY = find(sets, y);
-
-    // Union by rank: Attach the smaller rank tree under the root of the higher rank tree
-    if (sets[rootX].rank < sets[rootY].rank) {
-        sets[rootX].parent = rootY;
-    } else if (sets[rootX].rank > sets[rootY].rank) {
-        sets[rootY].parent = rootX;
-    } else {
-        sets[rootY].parent = rootX;
-        sets[rootX].rank++;
-    }
+// Function to find the representative of the set containing element x
+int find(int x) {
+    if (x != parent[x])
+        parent[x] = find(parent[x]); // Path Compression
+    return parent[x];
 }
 
 int main() {
-    int size;
-    
-    printf("Enter the size of the disjoint-set: ");
-    scanf("%d", &size);
-
-    struct DisjointSet* sets = (struct DisjointSet*)malloc(size * sizeof(struct DisjointSet));
-    makeSet(sets, size);
-
-    int choice, x, y;
-    
-    while (1) {
-        printf("\nOperations:\n");
-        printf("1. Union (Merge two sets)\n");
-        printf("2. Find (Check if elements are in the same set)\n");
-        printf("3. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-
-        if (choice == 1) {
-            printf("Enter two elements to merge: ");
-            scanf("%d %d", &x, &y);
-            if (x < 0 || x >= size || y < 0 || y >= size) {
-                printf("Invalid elements\n");
-            } else {
-                unionSets(sets, x, y);
-                printf("Union performed.\n");
-            }
-        } else if (choice == 2) {
-            printf("Enter two elements to check if they are in the same set: ");
-            scanf("%d %d", &x, &y);
-            if (x < 0 || x >= size || y < 0 || y >= size) {
-                printf("Invalid elements\n");
-            } else {
-                if (find(sets, x) == find(sets, y)) {
-                    printf("They are in the same set.\n");
-                } else {
-                    printf("They are in different sets.\n");
-                }
-            }
-        } else if (choice == 3) {
-            break;
-        } else {
-            printf("Invalid choice\n");
-        }
+    printf("Enter the number of elements: ");
+    if (scanf("%d", &n) != 1 || n <= 0 || n > MAX) {
+        printf("Invalid input. Please enter a positive integer less than or equal to %d.\n", MAX);
+        return 1;
     }
 
-    free(sets);
-    return 0;
+    // Initialize sets
+    for (int i = 0; i < n; i++) {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+
+    int choice, x, y;
+    while (1) {
+        printf("\nOperations:\n1. Union\n2. Find\n3. Display Set Representatives\n4. Exit\nEnter your choice: ");
+
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter an integer.\n");
+            continue;
+        }
+
+        switch (choice) {
+            case 1:
+                // Union operation
+                printf("Enter elements to perform union: ");
+                if (scanf("%d %d", &x, &y) != 2 || x < 0 || x >= n || y < 0 || y >= n) {
+                    printf("Invalid input. Please enter valid elements.\n");
+                } else {
+                    int rootX = find(x);
+                    int rootY = find(y);
+
+                    if (rootX == rootY) {
+                        printf("%d and %d are already in the same set.\n", x, y);
+                    } else {
+                        // Merge sets
+                        if (rank[rootX] > rank[rootY]) {
+                            parent[rootY] = rootX;
+                        } else if (rank[rootX] < rank[rootY]) {
+                            parent[rootX] = rootY;
+                        } else {
+                            parent[rootY] = rootX;
+                            rank[rootX]++;
+                        }
+                        printf("Union of %d and %d is performed.\n", x, y);
+                    }
+                }
+                break;
+            case 2:
+                // Find operation
+                printf("Enter element to find its set: ");
+                if (scanf("%d", &x) != 1 || x < 0 || x >= n) {
+                    printf("Invalid input. Please enter a valid element.\n");
+                } else {
+                    printf("Set representative of %d is %d\n", x, find(x));
+                }
+                break;
+            case 3:
+                // Display set representatives
+                printf("Set Representatives:\n");
+                for (int i = 0; i < n; i++) {
+                    printf("Element %d belongs to set with representative %d\n", i, find(i));
+                }
+                break;
+            case 4:
+                return 0;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+                break;
+        }
+    }
 }
