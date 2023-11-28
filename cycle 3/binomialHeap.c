@@ -8,6 +8,7 @@ struct Node {
     struct Node *parent, *child, *sibling;
 };
 
+// Create a new node with given key
 struct Node *createNode(int key) {
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     newNode->data = key;
@@ -16,6 +17,7 @@ struct Node *createNode(int key) {
     return newNode;
 }
 
+// Merge two binomial trees of the same degree
 struct Node *mergeBinomialTrees(struct Node *tree1, struct Node *tree2) {
     if (tree1->data > tree2->data) {
         struct Node *temp = tree1;
@@ -31,6 +33,7 @@ struct Node *mergeBinomialTrees(struct Node *tree1, struct Node *tree2) {
     return tree1;
 }
 
+// Union of two Binomial Heaps
 struct Node *unionBinomialHeaps(struct Node *h1, struct Node *h2) {
     struct Node *head = NULL;
     struct Node *temp1 = h1;
@@ -57,11 +60,13 @@ struct Node *unionBinomialHeaps(struct Node *h1, struct Node *h2) {
     return head;
 }
 
+// Insert a key into a Binomial Heap
 struct Node *insertNode(struct Node *head, int key) {
     struct Node *newNode = createNode(key);
     return unionBinomialHeaps(head, newNode);
 }
 
+// Get the minimum node in a Binomial Heap
 struct Node *getMin(struct Node *heap) {
     struct Node *minNode = heap;
     struct Node *temp = heap;
@@ -76,6 +81,7 @@ struct Node *getMin(struct Node *heap) {
     return minNode;
 }
 
+// Extract the minimum node from a Binomial Heap
 struct Node *extractMin(struct Node *heap) {
     struct Node *minNode = getMin(heap);
     struct Node *prev = NULL, *curr = heap;
@@ -112,6 +118,7 @@ void decreaseKey(struct Node *heap, int oldKey, int newKey) {
     // Typically involves finding the node with oldKey and updating its value
 }
 
+// Delete a key from a Binomial Heap
 struct Node *deleteKey(struct Node *heap, int key) {
     if (heap == NULL) {
         printf("Heap is empty.\n");
@@ -129,14 +136,16 @@ struct Node *deleteKey(struct Node *heap, int key) {
     return heap;
 }
 
-void display(struct Node *root) {
+// Display the Binomial Heap in a readable format
+void display(struct Node *root, int depth) {
     while (root != NULL) {
-        printf("%d ", root->data);
-        display(root->child);
+        printf("(%d,%d) ", root->data, root->degree);
+        display(root->child, depth + 1);
         root = root->sibling;
     }
 }
 
+// Main function to demonstrate Binomial Heap operations
 int main() {
     struct Node *heap = NULL;
     int choice, key;
@@ -179,7 +188,7 @@ int main() {
                     printf("Heap is empty.\n");
                 } else {
                     printf("Binomial Heap: ");
-                    display(heap);
+                    display(heap, 0);
                     printf("\n");
                 }
                 break;
