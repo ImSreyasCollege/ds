@@ -10,19 +10,18 @@ bool isVis(int val){
     return false;
 }
 
-void bfs(int start){
+void bfs(int i){
     if(front == -1 && back == -1){
         front = 0;
-        vis[++back] = start;
+        vis[++back] = i;
     }
     for(int j = 0; j < n; j++){
-        if(start != j && mat[start][j] == 1 && !isVis(j)){
+        if(i != j && mat[i][j] == 1 && !isVis(j)){
             vis[++back] = j;
         }
     }
-    if(back == n) return;
-    ++front;
-    bfs(vis[front]);
+    if(back == n-1) return;
+    bfs(vis[++front]);
 }
 
 void main(){
