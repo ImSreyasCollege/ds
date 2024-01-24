@@ -4,23 +4,23 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-typedef struct node{
+struct node{
     int data;
     struct node *link;
-} node;
+};
 
-node * head = NULL;
-node *createNewNode(){
+struct node * head = NULL;
+struct node *createNewNode(){
     int data;
     printf("enter the data to be inserted : ");
     scanf("%d", &data);
-    node * newnode = (node *)malloc((sizeof(node *)));
-    newnode -> data = data;
-    newnode -> link = NULL;
+    struct node *newnode = (struct node *)malloc((sizeof(struct node)));
+    newnode->data = data;
+    newnode->link = NULL;
     return newnode;
 }
 void insertAtBeginning(){
-    node *newnode = createNewNode();
+    struct node *newnode = createNewNode();
     if(head==NULL) head = newnode;
     else {
         (newnode)->link = head;
@@ -30,8 +30,8 @@ void insertAtBeginning(){
 void insertAtEnd(){
     if(head==NULL) insertAtBeginning();
     else {
-    node *newnode = createNewNode();
-          node * temp = head;     
+    struct node *newnode = createNewNode();
+          struct node * temp = head;     
           while(temp->link !=NULL) temp = temp -> link;
           temp->link = newnode;
     }
@@ -42,8 +42,8 @@ void insertAtPosition(){
     scanf("%d", &pos);
     if(pos<=1 || head==NULL) insertAtBeginning();
     else {
-        node * newnode = createNewNode();
-        node * temp = head;
+        struct node * newnode = createNewNode();
+        struct node * temp = head;
         int count = 2;
         while(temp->link != NULL && count!=pos){
             temp = temp->link;
@@ -60,8 +60,8 @@ void deleteAtBeginning(){
 void deleteAtEnd(){
     if(head==NULL) printf("linked list is empty.\n");
     else {
-        node * temp = head;
-        node * dup = temp;
+        struct node *temp = head;
+        struct node *dup = temp;
         if(temp->link == NULL) head = NULL;
         else {
             while(temp->link!=NULL) {
@@ -80,8 +80,8 @@ void deleteAtPosition(){
 
         if(pos<=1) deleteAtBeginning();
         else {
-            node * temp = head;
-            node * dup = temp;
+            struct node *temp = head;
+            struct node *dup = temp;
             int count = 2;
             while(temp->link != NULL && count!=pos){
                 dup = temp;
@@ -96,7 +96,7 @@ void deleteAtPosition(){
 void display(){
     if(head == NULL) printf("linked list is empty.\n");
     else {
-        node *temp = head;
+        struct node *temp = head;
         while(temp != NULL){
             printf("%d -> ", temp-> data);
             temp = temp->link;
@@ -108,7 +108,7 @@ void search(){
     printf("enter the element to search : ");
     scanf("%d", &key);
 
-    node * temp = head;
+    struct node *temp = head;
     while(temp != NULL){
         if(temp->data == key){
             printf("element found.\n");
